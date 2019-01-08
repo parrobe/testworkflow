@@ -20,7 +20,7 @@ go:
 
 jobs:
   include:
-    - stage: test
+    - stage: build and test
       if: type IN (pull_request) OR tag IS present
       env: 
         - DOCKER_DOWNGRADE="DOWNGRADE"
@@ -32,7 +32,7 @@ jobs:
         - DOCKER_DOWNGRADE="NO"
         - BASE_IMAGE=centos
     - stage: deploy
-      if: head_branch = master AND tag IS present
+      if: tag IS present
       before_install: skip
       install: skip
       before_script: skip
@@ -54,3 +54,6 @@ script:
 
 after_success:
   - echo after_success
+
+notifications:
+  email: false
