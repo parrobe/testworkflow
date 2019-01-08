@@ -50,7 +50,7 @@ echo deployyyingggg!
 
 # Add GH as a remote and test we have no commits missing
 
-git remote add GH git@github.com:parrobe/testworkflow.git
+git remote add GH https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
 
 git fetch GH
 
@@ -71,7 +71,7 @@ cd github.com/parrobe
 git clone https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
 #git@github.com:parrobe/testworkflow.git
 cd testworkflow
-git remote add GHE git@github.ibm.com:mq-cloudpak/testworkflow.git
+git remote add GHE https://${GHE_TOKEN}@github.ibm.com/mq-cloudpak/testworkflow.git
 git fetch GHE
 git checkout -b release_$TRAVIS_TAG GHE/$TRAVIS_TAG
 git push origin release_$TRAVIS_TAG
