@@ -16,13 +16,13 @@
 
 
 
-if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]; then 
+#if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]; then 
     echo "We are a release build!"
     env
-else
-    echo Not Deploying!
-    exit 0
-fi
+#else
+ #   echo Not Deploying!
+  #  exit 0
+#fi
 
 if [ "$BASE_IMAGE" = "ubuntu" ] && [ "$DOCKER_DOWNGRADE" = "NO" ]; then
     echo "We are the correct job!"
