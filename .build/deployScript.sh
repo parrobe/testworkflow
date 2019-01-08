@@ -79,4 +79,8 @@ git push origin release_$TRAVIS_TAG
 
 git request-pull origin/master ./
 
+curl -X POST -u parrobe -k \
+  -d '{"title": "New feature $TRAVIS_TAG","head": "release_$TRAVIS_TAG","base": "master"}' \
+  https://api.github.com/repos/parrobe/testworkflow/pulls
+
 echo "PR on github.com for release should be available now!"
