@@ -18,16 +18,27 @@ language: go
 go:
   - "1.10"
 
-env:
-  - BASE_IMAGE=FOO
-  - BASE_IMAGE=BAR
-
 jobs:
   include:
     - stage: test
       if: type IN (pull_request)
-      env: DOCKER_DOWNGRADE="UP"
-    - env: DOCKER_DOWNGRADE="DOWN"
+      env: 
+        - DOCKER_DOWNGRADE="DOWNGRADE"
+        - BASE_IMAGE=ubuntu
+    - env: 
+        - DOCKER_DOWNGRADE="NO"
+        - BASE_IMAGE=ubuntu
+    - env: 
+        - DOCKER_DOWNGRADE="NO"
+        - BASE_IMAGE=centos
+    - stage: deploy
+      if: branch = master AND tag IS present
+      before_install: skip
+      install: skip
+      before_script: skip
+      script: echo DEPLOYING
+      after_success: skip
+
 
 before_install:
   - echo BEFORE_INStALL
