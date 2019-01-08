@@ -18,15 +18,14 @@
 # test if release build
 
 
-set -ev
+set -e
 
-#if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]; then 
+if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]; then 
     echo "We are a release build!"
- #   env
-#else
- #   echo Not Deploying!
-  #  exit 0
-#fi
+else
+   echo Not Deploying!
+   exit 0
+fi
 
 # test is one particular job
 
@@ -46,10 +45,11 @@ else
     exit 0
 fi
 
-echo deployyyingggg!
+echo Deploying to GitHub!
 
 # Add GH as a remote and test we have no commits missing
 
+echo "Checking for any missing commits"
 git remote add GH https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
 
 git fetch GH
@@ -62,6 +62,7 @@ if [[ "$MERGELOG" != *"Already up-to-date."* ]]; then
     exit 1
 fi
 
+echo "pushing to changes to a new branch on github.com called 'release_$TRAVIS_TAG'"
 # create GH directory structure
 git config --global user.email "parrobe@uk.ibm.com"
 git config --global user.name "parrobe"
@@ -70,12 +71,12 @@ cd ../../
 mkdir -p github.com/parrobe
 cd github.com/parrobe
 git clone https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
-#git@github.com:parrobe/testworkflow.git
 cd testworkflow
 git remote add GHE https://${GHE_TOKEN}@github.ibm.com/mq-cloudpak/testworkflow.git
 git fetch GHE
 git checkout -b release_$TRAVIS_TAG $TRAVIS_TAG
 git push origin release_$TRAVIS_TAG
-git request-pull origin/master origin/release_$TRAVIS_TAG
 
-echo "PR should be available now!"
+git request-pull origin/master release_$TRAVIS_TAG
+
+echo "PR on github.com for release should be available now!"
