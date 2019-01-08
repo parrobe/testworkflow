@@ -18,7 +18,7 @@
 # test if release build
 
 
-set -e
+#set -e
 
 if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]; then 
     echo "We are a release build!"
