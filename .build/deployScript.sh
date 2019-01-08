@@ -54,7 +54,7 @@ git remote add GH https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
 
 git fetch GH
 
-MERGELOG=`git merge gh/master`
+MERGELOG=`git merge GH/master`
 if [[ "$MERGELOG" != *"Already up-to-date."* ]]; then
     echo "Error: we have commits waiting to be merged"
     echo "$MERGELOG"
