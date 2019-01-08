@@ -55,6 +55,7 @@ git remote add GH https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
 git fetch GH
 
 MERGELOG=`git merge GH/master`
+echo $MERGELOG
 if [[ "$MERGELOG" != *"Already up-to-date."* ]]; then
     echo "Error: we have commits waiting to be merged"
     echo "$MERGELOG"
@@ -66,7 +67,7 @@ git config --global user.email "parrobe@uk.ibm.com"
 git config --global user.name "parrobe"
 
 cd ../../
-mkdir github.com/parrobe
+mkdir -p github.com/parrobe
 cd github.com/parrobe
 git clone https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
 #git@github.com:parrobe/testworkflow.git
