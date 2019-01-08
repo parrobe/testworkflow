@@ -77,6 +77,6 @@ git fetch GHE
 git checkout -b release_$TRAVIS_TAG $TRAVIS_TAG
 git push origin release_$TRAVIS_TAG
 
-git request-pull origin/master release_$TRAVIS_TAG
+git request-pull origin/master ./
 
 echo "PR on github.com for release should be available now!"
