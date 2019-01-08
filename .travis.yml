@@ -24,7 +24,8 @@ env:
 
 jobs:
   include:
-    - if: type IN (pull_request)
+    - stage: test
+      if: type IN (pull_request)
       env: DOCKER_DOWNGRADE="UP"
     - env: DOCKER_DOWNGRADE="DOWN"
 
