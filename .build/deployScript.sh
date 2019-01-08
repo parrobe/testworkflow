@@ -17,9 +17,12 @@
 
 # test if release build
 
+
+set -ev
+
 #if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]; then 
     echo "We are a release build!"
-    env
+ #   env
 #else
  #   echo Not Deploying!
   #  exit 0
