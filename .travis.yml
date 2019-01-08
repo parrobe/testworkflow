@@ -21,6 +21,7 @@ go:
 env: 
   - BASE_IMAGE=ubuntu
   - BASE_IMAGE=centos
+env: 
   - DOCKER_DOWNGRADE="DOWNGRADE"
   - DOCKER_DOWNGRADE="NO"
 
