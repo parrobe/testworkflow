@@ -47,6 +47,10 @@ fi
 
 echo Deploying to GitHub!
 
+curl -X POST -u parrobe:${GH_TOKEN} -k \
+  -d '{"title": "New feature $TRAVIS_TAG","head": "release_$TRAVIS_TAG","base": "master"}' \
+  https://api.github.com/repos/parrobe/testworkflow/pulls
+
 # Add GH as a remote and test we have no commits missing
 
 echo "Checking for any missing commits"
@@ -79,7 +83,7 @@ git push origin release_$TRAVIS_TAG
 
 git request-pull origin/master ./
 
-curl -X POST -u parrobe -k \
+curl -X POST -u parrobe:${GH_TOKEN} -k \
   -d '{"title": "New feature $TRAVIS_TAG","head": "release_$TRAVIS_TAG","base": "master"}' \
   https://api.github.com/repos/parrobe/testworkflow/pulls
 
