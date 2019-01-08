@@ -50,9 +50,9 @@ echo deployyyingggg!
 
 # Add GH as a remote and test we have no commits missing
 
-git remote add gh git@github.com:parrobe/testworkflow.git
+git remote add GH git@github.com:parrobe/testworkflow.git
 
-git fetch gh
+git fetch GH
 
 MERGELOG=`git merge gh/master`
 if [[ "$MERGELOG" != *"Already up-to-date."* ]]; then
@@ -62,11 +62,14 @@ if [[ "$MERGELOG" != *"Already up-to-date."* ]]; then
 fi
 
 # create GH directory structure
+git config --global user.email "parrobe@uk.ibm.com"
+git config --global user.name "parrobe"
 
 cd ../../
 mkdir github.com/parrobe
 cd github.com/parrobe
-git clone git@github.com:parrobe/testworkflow.git
+git clone https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
+#git@github.com:parrobe/testworkflow.git
 cd testworkflow
 git remote add GHE git@github.ibm.com:mq-cloudpak/testworkflow.git
 git fetch GHE
