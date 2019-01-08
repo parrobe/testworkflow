@@ -18,7 +18,7 @@
 # test if release build
 
 
-#set -e
+set -e
 
 if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]; then 
     echo "We are a release build!"
@@ -55,14 +55,15 @@ echo "Checking for any missing commits"
 git remote add GH https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
 
 git fetch GH
-
+set +e
 MERGELOG=`git merge GH/master`
-echo $MERGELOG
+set -e
 if [[ "$MERGELOG" != *"Already up-to-date."* ]]; then
     echo "Error: we have commits waiting to be merged"
     echo "$MERGELOG"
     exit 1
 fi
+echo $MERGELOG
 
 echo "pushing to changes to a new branch on github.com called 'release_$TRAVIS_TAG'"
 # create GH directory structure
