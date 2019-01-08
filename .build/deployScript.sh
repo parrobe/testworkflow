@@ -24,7 +24,7 @@ else
     exit 0
 fi
 
-if [ "$BASE_IMAGE" = "ubuntu" ] && [ "DOCKER_DOWNGRADE" = "NO" ]; then
+if [ "$BASE_IMAGE" = "ubuntu" ] && [ "$DOCKER_DOWNGRADE" = "NO" ]; then
     echo "We are the correct job!"
 else
     echo Not Deploying!
