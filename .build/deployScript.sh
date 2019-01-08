@@ -15,4 +15,27 @@
 # limitations under the License.
 
 
+
+if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]; then 
+    echo "We are a release build!"
+    env
+else
+    echo Not Deploying!
+    exit 0
+fi
+
+if [ "$BASE_IMAGE" = "ubuntu" ] && [ "DOCKER_DOWNGRADE" = "NO" ]; then
+    echo "We are the correct job!"
+else
+    echo Not Deploying!
+    exit 0
+fi
+
+if [ "$TRAVIS_REPO_SLUG" = "mq-cloudpak/testworkflow" ]; then
+    echo "We are the correct repo!"
+else
+    echo Not Deploying!
+    exit 0
+fi
+
 echo deployyyingggg!

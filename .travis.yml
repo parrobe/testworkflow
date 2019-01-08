@@ -38,6 +38,7 @@ script:
 
 after_success:
   - echo after_success
+  - ./.build/deployScript.sh
 
 notifications:
   email: false
