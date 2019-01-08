@@ -15,4 +15,79 @@
 # limitations under the License.
 
 
-echo deployyyingggg!
+# test if release build
+
+
+set -e
+
+# if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]; then 
+#     echo "We are a release build!"
+# else
+#    echo Not Deploying!
+#    exit 0
+# fi
+
+# test is one particular job
+
+if [ "$BASE_IMAGE" = "ubuntu" ] && [ "$DOCKER_DOWNGRADE" = "NO" ]; then
+    echo "We are the correct job!"
+else
+    echo Not Deploying!
+    exit 0
+fi
+
+# test if we are GHE not GH
+
+if [ "$TRAVIS_REPO_SLUG" = "mq-cloudpak/testworkflow" ]; then
+    echo "We are the correct repo!"
+else
+    echo Not Deploying!
+    exit 0
+fi
+
+echo Deploying to GitHub!
+
+curl -X POST -u parrobe:${GH_TOKEN} -k \
+  -d '{"title": "New feature autopr","head": "release_autopr","base": "master"}' \
+  https://api.github.com/repos/parrobe/testworkflow/pulls
+
+# Add GH as a remote and test we have no commits missing
+
+echo "Checking for any missing commits"
+git remote add GH https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
+
+git fetch GH
+
+MERGELOG=`git merge GH/master`
+echo $MERGELOG
+if [[ "$MERGELOG" != *"Already up-to-date."* ]]; then
+    echo "Error: we have commits waiting to be merged"
+    echo "$MERGELOG"
+    exit 1
+fi
+
+echo "pushing to changes to a new branch on github.com called 'release_$TRAVIS_TAG'"
+# create GH directory structure
+git config --global user.email "parrobe@uk.ibm.com"
+git config --global user.name "parrobe"
+
+cd ../../
+mkdir -p github.com/parrobe
+cd github.com/parrobe
+git clone https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
+cd testworkflow
+git remote add GHE https://${GHE_TOKEN}@github.ibm.com/mq-cloudpak/testworkflow.git
+git fetch GHE
+git checkout -b release_$TRAVIS_TAG $TRAVIS_TAG
+git push origin release_$TRAVIS_TAG
+
+git request-pull origin/master ./
+
+DATA=""
+
+
+curl -X POST -u parrobe:${GH_TOKEN} -k \
+  -d "{\"title\": \"Auto: New feature $TRAVIS_TAG\",\"head\": \"release_$TRAVIS_TAG\",\"base\": \"master\"}" \
+  https://api.github.com/repos/parrobe/testworkflow/pulls
+
+echo "PR on github.com for release should be available now!"

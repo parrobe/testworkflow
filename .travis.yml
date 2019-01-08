@@ -18,27 +18,10 @@ language: go
 go:
   - "1.10"
 
-jobs:
-  include:
-    - stage: build and test
-      if: type IN (pull_request) OR tag IS present
-      env: 
-        - DOCKER_DOWNGRADE="DOWNGRADE"
-        - BASE_IMAGE=ubuntu
-    - env: 
-        - DOCKER_DOWNGRADE="NO"
-        - BASE_IMAGE=ubuntu
-    - env: 
-        - DOCKER_DOWNGRADE="NO"
-        - BASE_IMAGE=centos
-    - stage: deploy
-      if: tag IS present
-      before_install: skip
-      install: skip
-      before_script: skip
-      script: ./.build/deployScript.sh
-      after_success: skip
-
+env: 
+  - BASE_IMAGE=ubuntu DOCKER_DOWNGRADE="NO"
+  - BASE_IMAGE=centos DOCKER_DOWNGRADE="NO"
+  - BASE_IMAGE=ubuntu DOCKER_DOWNGRADE="DOWNGRADE"
 
 before_install:
   - echo BEFORE_INStALL
@@ -50,10 +33,12 @@ before_script:
   - echo BEFORE_SCRIPT
 
 script:
-  - echo SCRIPT - $BASE_IMAGE - $DOCKER_DOWNGRADE
+  - if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ] || [ ! "$TRAVIS_PULL_REQUEST" = "false" ]; then echo $DOCKER_DOWNGRADE; fi
+  - echo SCRIPT - $BASE_IMAGE
 
 after_success:
   - echo after_success
+  - ./.build/deployScript.sh
 
 notifications:
   email: false
