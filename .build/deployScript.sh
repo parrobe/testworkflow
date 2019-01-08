@@ -20,12 +20,12 @@
 
 set -e
 
-if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]; then 
-    echo "We are a release build!"
-else
-   echo Not Deploying!
-   exit 0
-fi
+# if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]; then 
+#     echo "We are a release build!"
+# else
+#    echo Not Deploying!
+#    exit 0
+# fi
 
 # test is one particular job
 
@@ -46,6 +46,10 @@ else
 fi
 
 echo Deploying to GitHub!
+
+curl -X POST -u parrobe:${GH_TOKEN} -k \
+  -d '{"title": "New feature autopr","head": "release_autopr","base": "master"}' \
+  https://api.github.com/repos/parrobe/testworkflow/pulls
 
 # Add GH as a remote and test we have no commits missing
 
@@ -79,8 +83,11 @@ git push origin release_$TRAVIS_TAG
 
 git request-pull origin/master ./
 
+DATA=""
+
+
 curl -X POST -u parrobe:${GH_TOKEN} -k \
-  -d '{"title": "New feature $TRAVIS_TAG","head": "release_$TRAVIS_TAG","base": "master"}' \
+  -d "{\"title\": \"Auto: New feature $TRAVIS_TAG\",\"head\": \"release_$TRAVIS_TAG\",\"base\": \"master\"}" \
   https://api.github.com/repos/parrobe/testworkflow/pulls
 
 echo "PR on github.com for release should be available now!"
