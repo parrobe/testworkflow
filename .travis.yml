@@ -19,14 +19,14 @@ go:
   - "1.10"
 
 env:
-  - BASE_IMAGE=ubuntu:16.04
-  - BASE_IMAGE=centos:latest
+  - BASE_IMAGE=FOO
+  - BASE_IMAGE=BAR
 
 jobs:
   include:
     - if: type IN (pull_request)
-      env: DOCKER_DOWNGRADE="echo something would be done here"
-    - env: DOCKER_DOWNGRADE="echo nothing to be done"
+      env: DOCKER_DOWNGRADE="UP"
+    - env: DOCKER_DOWNGRADE="DOWN"
 
 before_install:
   - echo BEFORE_INStALL
@@ -38,7 +38,7 @@ before_script:
   - echo BEFORE_SCRIPT
 
 script:
-  - echo SCRIPT
+  - echo SCRIPT - $BASE_IMAGE - $DOCKER_DOWNGRADE
 
 after_success:
   - echo after_success
