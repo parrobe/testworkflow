@@ -74,7 +74,7 @@ git clone https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
 cd testworkflow
 git remote add GHE https://${GHE_TOKEN}@github.ibm.com/mq-cloudpak/testworkflow.git
 git fetch GHE
-git checkout -b release_$TRAVIS_TAG GHE/$TRAVIS_TAG
+git checkout -b release_$TRAVIS_TAG $TRAVIS_TAG
 git push origin release_$TRAVIS_TAG
 git request-pull origin/master origin/release_$TRAVIS_TAG
 
