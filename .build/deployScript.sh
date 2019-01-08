@@ -15,6 +15,7 @@
 # limitations under the License.
 
 
+# test if release build
 
 #if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ]; then 
     echo "We are a release build!"
@@ -24,12 +25,16 @@
   #  exit 0
 #fi
 
+# test is one particular job
+
 if [ "$BASE_IMAGE" = "ubuntu" ] && [ "$DOCKER_DOWNGRADE" = "NO" ]; then
     echo "We are the correct job!"
 else
     echo Not Deploying!
     exit 0
 fi
+
+# test if we are GHE not GH
 
 if [ "$TRAVIS_REPO_SLUG" = "mq-cloudpak/testworkflow" ]; then
     echo "We are the correct repo!"
@@ -39,3 +44,31 @@ else
 fi
 
 echo deployyyingggg!
+
+# Add GH as a remote and test we have no commits missing
+
+git remote add gh git@github.com:parrobe/testworkflow.git
+
+git fetch gh
+
+MERGELOG=`git merge gh/master`
+if [[ "$MERGELOG" != *"Already up-to-date."* ]]; then
+    echo "Error: we have commits waiting to be merged"
+    echo "$MERGELOG"
+    exit 1
+fi
+
+# create GH directory structure
+
+cd ../../
+mkdir github.com/parrobe
+cd github.com/parrobe
+git clone git@github.com:parrobe/testworkflow.git
+cd testworkflow
+git remote add GHE git@github.ibm.com:mq-cloudpak/testworkflow.git
+git fetch GHE
+git checkout -b release_$TRAVIS_TAG GHE/$TRAVIS_TAG
+git push origin release_$TRAVIS_TAG
+git request-pull origin/master origin/release_$TRAVIS_TAG
+
+echo "PR should be available now!"
