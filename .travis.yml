@@ -18,27 +18,11 @@ language: go
 go:
   - "1.10"
 
-jobs:
-  include:
-    - stage: build and test
-      if: type IN (pull_request) OR tag IS present
-      env: 
-        - DOCKER_DOWNGRADE="DOWNGRADE"
-        - BASE_IMAGE=ubuntu
-    - env: 
-        - DOCKER_DOWNGRADE="NO"
-        - BASE_IMAGE=ubuntu
-    - env: 
-        - DOCKER_DOWNGRADE="NO"
-        - BASE_IMAGE=centos
-    - stage: deploy
-      if: tag IS present
-      before_install: skip
-      install: skip
-      before_script: skip
-      script: ./.build/deployScript.sh
-      after_success: skip
-
+env: 
+  - BASE_IMAGE=ubuntu
+  - BASE_IMAGE=centos
+  - DOCKER_DOWNGRADE="DOWNGRADE"
+  - DOCKER_DOWNGRADE="NO"
 
 before_install:
   - echo BEFORE_INStALL
