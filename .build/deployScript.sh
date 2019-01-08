@@ -47,12 +47,10 @@ fi
 
 echo Deploying to GitHub!
 
-curl -X POST -u parrobe:${GH_TOKEN} -k \
-  -d '{"title": "New feature autopr","head": "release_autopr","base": "master"}' \
-  https://api.github.com/repos/parrobe/testworkflow/pulls
+git config --global user.email "parrobe@uk.ibm.com"
+git config --global user.name "parrobe"
 
 # Add GH as a remote and test we have no commits missing
-
 echo "Checking for any missing commits"
 git remote add GH https://${GH_TOKEN}@github.com/parrobe/testworkflow.git
 
@@ -68,8 +66,6 @@ fi
 
 echo "pushing to changes to a new branch on github.com called 'release_$TRAVIS_TAG'"
 # create GH directory structure
-git config --global user.email "parrobe@uk.ibm.com"
-git config --global user.name "parrobe"
 
 cd ../../
 mkdir -p github.com/parrobe

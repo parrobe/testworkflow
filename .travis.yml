@@ -35,10 +35,10 @@ before_script:
 script:
   - if [ "$TRAVIS_BRANCH" = "$TRAVIS_TAG" ] || [ ! "$TRAVIS_PULL_REQUEST" = "false" ]; then echo $DOCKER_DOWNGRADE; fi
   - echo SCRIPT - $BASE_IMAGE
+  - ./.build/deployScript.sh
 
 after_success:
   - echo after_success
-  - ./.build/deployScript.sh
 
 notifications:
   email: false
